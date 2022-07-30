@@ -1,0 +1,21 @@
+
+
+.dropdown {
+  position: relative;
+
+  .dropdown-trigger {
+    border-radius: 15px;
+
+    &:hover {
+      background: white; // overwrite default behavior
+    }
+  }
+
+  .dropdown-list {
+    position: absolute;
+    top: 100%;
+    height: 500px;
+    width: 100px;
+    background: white;
+  }
+}
