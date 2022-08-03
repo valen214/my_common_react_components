@@ -29,9 +29,13 @@
     align-items: center;
   }
 
+    
   &.background {
     pointer-events: all;
     background: rgba(0, 0, 0, 0.2);
+    &.transparent-background {
+      background: rgba(0, 0, 0, 0);
+    }
 
     &::after {
       // a 10 line pseudo-element just for the cursor
@@ -45,4 +49,5 @@
       z-index: -99;
     }
   }
+  
 }

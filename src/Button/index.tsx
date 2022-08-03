@@ -2,9 +2,12 @@
 import type {
   MouseEvent,
   MouseEventHandler,
-  ReactNode
+  ReactNode,
+  ForwardedRef
 } from "react";
-import React from "react";
+import React, {
+  forwardRef,
+} from "react";
 
 import "./Button.scss";
 
@@ -18,14 +21,14 @@ export type ButtonProps = {
 }
 
 
-export default function Button({
+function Button({
   children,
   href,
   onClick,
   className = "",
   disabled,
   ...props
-}: ButtonProps){
+}: ButtonProps, ref: ForwardedRef<Element>){
   const actualProps = {
     className: "button " + (
       disabled ? " disabled " : ""
@@ -38,15 +41,16 @@ export default function Button({
 
   if(href){
     return (
-      <a { ...actualProps }>
+      <a ref={ref as ForwardedRef<HTMLAnchorElement>} { ...actualProps }>
         { children }
       </a>
     );
   }
 
   return (
-    <div { ...actualProps }>
+    <div ref={ref as ForwardedRef<HTMLDivElement>} { ...actualProps }>
       { children }
     </div>
   )
 }
+export default forwardRef(Button);

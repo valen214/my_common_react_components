@@ -2,6 +2,7 @@
 
 .dropdown {
   position: relative;
+  overflow: visible;
 
   .dropdown-trigger {
     border-radius: 15px;
@@ -11,11 +12,4 @@
     }
   }
 
-  .dropdown-list {
-    position: absolute;
-    top: 100%;
-    height: 500px;
-    width: 100px;
-    background: white;
-  }
 }

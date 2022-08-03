@@ -2,7 +2,7 @@
 import type { 
   ReactNode
 } from "react";
-import {
+import React, {
   useEffect, useState, useMemo
 } from "react";
 
@@ -17,6 +17,7 @@ export type FullPageElementProps = {
   element?: string
   flexCentered?: boolean
   noBackground?: boolean
+  transparentBackground?: boolean
   noSize?: boolean
 }
 
@@ -27,14 +28,13 @@ export default function FullPageElement({
   element = "div",
   flexCentered = true,
   noBackground,
+  transparentBackground = false,
   noSize
 }: FullPageElementProps){
 
   const [ fullPageElem ] = useState(() => {
     const fullPageElem = document.createElement(element);
     fullPageElem.classList.add("root-element");
-    fullPageElem.classList.toggle("background", !noBackground);
-    fullPageElem.classList.toggle("full-page", !noSize);
 
     // should be aware of reference of onClose
     fullPageElem.addEventListener("click", (e) => {
@@ -44,7 +44,14 @@ export default function FullPageElement({
     })
 
     return fullPageElem;
-  })
+  });
+  useEffect(() => {
+    let cl = fullPageElem.classList;
+
+    cl.toggle("background", !noBackground);
+    cl.toggle("transparent-background", transparentBackground);
+    cl.toggle("full-page", !noSize);
+  }, [ noBackground, transparentBackground, noSize ]);
   useEffect(() => {
     document.body.appendChild(fullPageElem);
     return () => {

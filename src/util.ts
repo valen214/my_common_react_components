@@ -5,6 +5,13 @@ export function capitalize(word: string){
   return word[0].toUpperCase() + word.slice(1);
 }
 
+export function toCamel(){
+
+}
+export function toSnake(){
+  
+}
+
 export function disableAllInput(){
   let inputElements = document.querySelectorAll("input");
   for(let elem of inputElements){
