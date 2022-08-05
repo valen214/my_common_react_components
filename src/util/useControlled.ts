@@ -73,5 +73,5 @@ export default function useControlled<T = unknown>({
   }, []);
 
   //@ts-ignore
-  return [ value, setValueIfUncontrolled];
+  return [ value, setValueIfUncontrolled ];
 }

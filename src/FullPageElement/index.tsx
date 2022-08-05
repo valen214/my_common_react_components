@@ -17,6 +17,7 @@ export type FullPageElementProps = {
   element?: string
   flexCentered?: boolean
   noBackground?: boolean
+  backgroundColor?: any
   transparentBackground?: boolean
   noSize?: boolean
 }
@@ -28,8 +29,9 @@ export default function FullPageElement({
   element = "div",
   flexCentered = true,
   noBackground,
+  backgroundColor,
   transparentBackground = false,
-  noSize
+  noSize,
 }: FullPageElementProps){
 
   const [ fullPageElem ] = useState(() => {
@@ -53,9 +55,14 @@ export default function FullPageElement({
     cl.toggle("full-page", !noSize);
   }, [ noBackground, transparentBackground, noSize ]);
   useEffect(() => {
+    fullPageElem.style.backgroundColor = backgroundColor;
+  }, [ backgroundColor ])
+  useEffect(() => {
     document.body.appendChild(fullPageElem);
     return () => {
-      document.body.removeChild(fullPageElem);
+      if(document.body.contains(fullPageElem)){
+        document.body.removeChild(fullPageElem);
+      }
     }
   }, [ fullPageElem ]);
 

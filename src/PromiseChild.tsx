@@ -1,6 +1,6 @@
 
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function PromiseChild({
   defaultValue,
@@ -10,11 +10,16 @@ export default function PromiseChild({
   children?: Promise<any>
 }){
   const [ resolvedValue, setResolvedValue ] = useState(defaultValue);
+  const callbackContainer = useRef(setResolvedValue);
 
   useEffect(() => {
     children?.then?.(value => {
-      setResolvedValue(value);
+      callbackContainer?.current(value);
     })
+
+    return () => {
+      // callbackContainer.current = () => {};
+    }
   }, [ children ])
 
   return (
