@@ -22,7 +22,12 @@ function sanitizeThis(self: any){
   ]);
 
   do{
-      for(let name of Object.getOwnPropertyNames(current)){
+      for(
+        let names = Object.getOwnPropertyNames(current), i = 0;
+        i < names.length;
+        ++i
+      ){
+        let name = names[i];
         if(!keepProperties.has(name)){
           delete current[name];
         }
@@ -84,14 +89,16 @@ export default class WorkerWrapper<A, R>
       	`const func = ${func.toString()};`,
         // self.onmessage = (e) => {
         "(",
-          (() => _addEventListener("message", (e) => {
-            _postMessage({
-              id: e.data.id,
-              // @ts-ignore
-              data: func(e.data.data)
-            });
-          })).toString(),
-        ")();",
+          ((func: ((arg: A) => R) | string) => {
+            _addEventListener("message", (e) => {
+              _postMessage({
+                id: e.data.id,
+                // @ts-ignore
+                data: func(e.data.data)
+              });
+            })
+          }).toString(),
+        ")(func);",
       "})()"
     ];
   }
