@@ -22,6 +22,13 @@ export type FullPageElementProps = {
   noSize?: boolean
 }
 
+
+/*
+https://github.com/mui/material-ui/blob/master/
+packages/mui-base/src/Portal/Portal.js
+
+do I need to cloneElement?
+*/
 export default function FullPageElement({
   children,
   onClose,

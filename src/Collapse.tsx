@@ -7,7 +7,7 @@ import { CSSTransition } from 'react-transition-group';
 
 
 const StyledCollapseWrapper = styled.div<{
-  open?: boolean
+  _in?: boolean
   height?: number | null
   ref?: RefObject<HTMLDivElement>
 }>`
@@ -21,8 +21,11 @@ const StyledCollapseWrapper = styled.div<{
   }
 
 
+  &:not([class*="collapse-wrapper"]) {
+    ${({_in, height}) => _in && height ? "height: " + height + "px;" : ""}
+  }
   &.collapse-wrapper-enter {
-    height: 0px;
+    height: 0;
   }
   &.collapse-wrapper-enter-active {
     ${({height}) => height ? "height: " + height + "px;" : ""}
@@ -46,15 +49,15 @@ const StyledCollapseWrapper = styled.div<{
 
 const Collapse = forwardRef<HTMLDivElement, {
   orientation?: "horizontal" | "vertical"
-  open?: boolean
+  in?: boolean
 } & Partial<PropsWithChildren<ReactNode>>>(function Collapse({
   orientation = "vertical",
-  open,
+  in: _in,
   children,
   ...props
 }, ref){
   const [ height, setHeight ] = useState<number | null>(0);
-  const [ _open, setOpen ] = useState(open);
+  const [ __in, set_in ] = useState(_in);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -66,19 +69,20 @@ const Collapse = forwardRef<HTMLDivElement, {
     }
 
     console.log("HEY", rect);
-  }, [ open ]);
+  }, [ _in ]);
 
   return (
     <CSSTransition
+      appear
       nodeRef={wrapperRef}
-      in={open}
+      in={_in}
       timeout={300}
       classNames="collapse-wrapper"
     >
       <StyledCollapseWrapper
         ref={wrapperRef}
         height={height}
-        open={open}
+        _in={_in}
       >
         <div ref={ref} {...props}>
           {children}
