@@ -1,30 +1,6 @@
 
 // @ts-nocheck
 
-export function capitalize(word: string){
-  return word[0].toUpperCase() + word.slice(1);
-}
-
-export function toCamel(){
-
-}
-export function toSnake(){
-  
-}
-
-export function disableAllInput(){
-  let inputElements = document.querySelectorAll("input");
-  for(let elem of inputElements){
-    elem.disabled = true;
-  }
-}
-export function enableAllInput(){
-  let inputElements = document.querySelectorAll("input");
-  for(let elem of inputElements){
-    elem.disabled = false;
-  }
-}
-
 // https://stackoverflow.com/questions/63711237
 type ThrottleOption = {
   repeat: number

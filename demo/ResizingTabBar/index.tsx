@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { Button, util } from '../..';
+import { Button } from '../..';
+import { capitalize } from '../../src/util/string';
 
 import "./Home.scss";
 
@@ -28,7 +29,7 @@ function Home() {
           Smart Search
         </Button>
       </div>
-      { util.capitalize("heyeyeye hyosaDDd ADSASD") }
+      { capitalize("heyeyeye hyosaDDd ADSASD") }
     </div>
   );
 }
