@@ -1,6 +1,6 @@
 
+import Button from '../../src/Button';
 import React, { useState } from 'react';
-import { Button } from '../..';
 import { capitalize } from '../../src/util/string';
 
 import "./Home.scss";
