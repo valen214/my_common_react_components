@@ -1,14 +1,17 @@
 
-import type { 
-  ReactNode
-} from "react";
-import React, {
-  useEffect, useState, useMemo
+import React, { 
+  CSSProperties,
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState, useMemo
 } from "react";
 
 import ReactDOM from "react-dom";
 
 import "./FullPageElement.scss";
+import { randomstring, toKebab } from "../util/string";
 
 export type FullPageElementProps = {
   children?: ReactNode
@@ -20,8 +23,8 @@ export type FullPageElementProps = {
   backgroundColor?: any
   transparentBackground?: boolean
   noSize?: boolean
+  backgroundStyle?: CSSProperties
 }
-
 
 /*
 https://github.com/mui/material-ui/blob/master/
@@ -29,6 +32,8 @@ packages/mui-base/src/Portal/Portal.js
 
 do I need to cloneElement?
 */
+
+
 export default function FullPageElement({
   children,
   onClose,
@@ -39,39 +44,81 @@ export default function FullPageElement({
   backgroundColor,
   transparentBackground = false,
   noSize,
+  backgroundStyle,
 }: FullPageElementProps){
-
-  const [ fullPageElem ] = useState(() => {
-    const fullPageElem = document.createElement(element);
+  const createRootElement = () => {
+    console.log("NEWWWWWWW FULL PAGE ELEMT");
+    let fullPageElem = document.createElement(element);
     fullPageElem.classList.add("root-element");
 
+
+
+    fullPageElem.classList.add(cssClass);
+
+    return fullPageElem;
+  };
+
+  const [ cssClass ] = useState(() => randomstring(16))
+
+  const [ fullPageElem, setFullPageElem ] = useState(createRootElement);
+  const [ styleElem, setStyleElem ] = useState(() => {
+    
+    const styleElem = document.createElement("style");
+    styleElem.setAttribute(
+      "data-description",
+      "style used by FullPageElement, " + cssClass
+    );
+    document.body.appendChild(styleElem);
+    return styleElem;
+  });
+
+  useEffect(() => {
+    console.log("HMMMMMMMM22222222222222");
     // should be aware of reference of onClose
-    fullPageElem.addEventListener("click", (e) => {
+    const listener = (e: MouseEvent) => {
+      console.log("HMMMMMMMM");
       if(e.target === fullPageElem){
         onClose?.(e);
       }
-    })
+    }
+    fullPageElem.addEventListener("click", listener)
 
-    return fullPageElem;
-  });
+    return () => {
+      console.log("DESSSSSSSTROY FULL PAGE ELEMT");
+      // if(document.body.contains(fullPageElem)){
+      //   document.body.removeChild(fullPageElem);
+      // }
+      // if(document.body.contains(styleElem)){
+      //   document.body.removeChild(styleElem);
+      // }
+
+      fullPageElem.removeEventListener("click", listener)
+    };
+  }, [ fullPageElem ]);
+
+
+
+
+  useEffect(() => {
+    let cssString = Object.entries({
+      ...(backgroundStyle || {})
+    }).map(([k, v]) => `${toKebab(k)}:${v};`).join("");
+    if(styleElem){
+      styleElem.innerHTML = `div.root-element.${cssClass} {${cssString}}`;
+    }
+  }, [ styleElem, backgroundStyle ])
+
+
   useEffect(() => {
     let cl = fullPageElem.classList;
 
     cl.toggle("background", !noBackground);
     cl.toggle("transparent-background", transparentBackground);
     cl.toggle("full-page", !noSize);
-  }, [ noBackground, transparentBackground, noSize ]);
+  }, [ fullPageElem, noBackground, transparentBackground, noSize ]);
   useEffect(() => {
     fullPageElem.style.backgroundColor = backgroundColor;
-  }, [ backgroundColor ])
-  useEffect(() => {
-    document.body.appendChild(fullPageElem);
-    return () => {
-      if(document.body.contains(fullPageElem)){
-        document.body.removeChild(fullPageElem);
-      }
-    }
-  }, [ fullPageElem ]);
+  }, [ fullPageElem, backgroundColor ])
 
   useEffect(() => {
     fullPageElem.classList.toggle("flex", flexCentered);

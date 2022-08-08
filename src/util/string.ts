@@ -9,6 +9,16 @@ export function toCamel(){
 export function toSnake(){
   
 }
+/*
+https://www.geeksforgeeks.org/
+how-to-convert-a-string-into-kebab-case-using-javascript/
+*/
+export function toKebab(str: string){
+  return str
+    .replace(/([a-z])([A-Z])/g, "$1-$2")
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
 
 
 
