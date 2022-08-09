@@ -15,6 +15,8 @@ export default function PromiseChild({
   useEffect(() => {
     children?.then?.(value => {
       callbackContainer?.current(value);
+    }).catch(err => {
+      console.error(err);
     })
 
     return () => {
