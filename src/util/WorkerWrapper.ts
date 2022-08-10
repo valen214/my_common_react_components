@@ -18,7 +18,7 @@ function sanitizeThis(self: any){
       'Array', 'Boolean', 'Number', 'String', 'Symbol',
       // Optional
       'Map', 'Math', 'Set',
-      "console",
+      "console", "parseInt",
   ]);
 
   do{
